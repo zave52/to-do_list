@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="mb-3">Delete task?</h1>
+  <h1 class="mb-3">Delete task with name <span class="text-danger">{{ task.content }}</span>?</h1>
   <form action="" method="post" novalidate>
     {% csrf_token %}
     <input type="submit" value="Yes" class="btn btn-danger">
