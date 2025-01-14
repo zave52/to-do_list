@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 class="mb-3">
+    TODO list
+    <a class="btn btn-primary float-end" href="{% url 'app:task-create' %}">Add task</a>
+  </h1>
+  {% if task_list %}
+    <ul class="p-0">
+      {% for task in task_list %}
+        <li class="list-unstyled ">
+          <h3 class="fw-bold">
+            {{ task.content }}
+            {% if task.is_completed %}
+              <span class="text text-success">Done</span>
+              <a href="{% url 'app:toggle-complete-status' pk=task.pk %}" class="btn btn-secondary float-end">Undo</a>
+            {% else %}
+              <span class="text text-danger">Not done</span>
+              <a href="{% url 'app:toggle-complete-status' pk=task.pk %}" class="btn btn-success float-end">Complete</a>
+            {% endif %}
+          </h3>
+          <p class="text fs-6">
+            Created: {{ task.datetime }}
+            {% if task.deadline_datetime %}
+              <span class="text text-danger-emphasis">Deadline: {{ task.deadline_datetime }}</span>
+            {% endif %}
+          </p>
+          <p class="text text-secondary fs-5">
+            Tags:
+            {% if task.tags %}
+              {% for tag in task.tags.all %}
+                {{ tag }}
+              {% endfor %}
+            {% else %}
+              no tags
+            {% endif %}
+            <a href="{% url 'app:task-update' pk=task.id %}"
+               class="link link-offset-2 link-underline link-underline-opacity-0">
+              Update
+            </a>
+            <a href="{% url 'app:task-delete' pk=task.id %}"
+               class="link link-offset-2 link-underline link-underline-opacity-0">
+              Delete
+            </a>
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no tasks in to-do app</p>
+  {% endif %}
+{% endblock %}
