@@ -1,4 +1,4 @@
-from django.http.request import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.urls.base import reverse
@@ -51,8 +51,10 @@ class TagDeleteView(generic.DeleteView):
     success_url = reverse_lazy("app:tag-list")
 
 
-def toggle_complete_status(request: HttpRequest, pk: int):
-    task = Task.objects.get(pk=pk)
-    task.is_completed = not task.is_completed
-    task.save()
-    return redirect(reverse("app:task-list"))
+class ToggleCompleteStatusView(generic.View):
+    @staticmethod
+    def get(request: HttpRequest, pk: int) -> HttpResponse:
+        task = Task.objects.get(pk=pk)
+        task.is_completed = not task.is_completed
+        task.save()
+        return redirect(reverse("app:task-list"))
